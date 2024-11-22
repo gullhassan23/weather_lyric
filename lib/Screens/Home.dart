@@ -1,11 +1,13 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:lottie/lottie.dart';
+
 import 'package:dayglow/Models/WeatherModel.dart';
 import 'package:dayglow/Services/ApiService.dart';
 import 'package:dayglow/widgets/BoxWidget.dart';
 import 'package:dayglow/widgets/detailRow.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:lottie/lottie.dart';
-import 'package:rive/rive.dart' as rive;
+import 'package:video_player/video_player.dart';
+// import 'package:rive/rive.dart' as rive;
 
 class Home extends StatefulWidget {
   final String city;
@@ -24,7 +26,7 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  // SunModel sunModel = SunModel();
+  late VideoPlayerController _controller;
 
   Map<String, String> getGreetingAndImage() {
     final currentTime = DateTime.now();
@@ -83,6 +85,19 @@ class _HomeState extends State<Home> {
   void initState() {
     getWeather();
     super.initState();
+    _controller = VideoPlayerController.asset("assets/video/videPl.mp4")
+      ..initialize().then((_) {
+        // Ensure the first frame is shown
+        setState(() {});
+      })
+      ..setLooping(true)
+      ..play(); // Start the video automatically
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 
   @override
@@ -148,15 +163,15 @@ class _HomeState extends State<Home> {
               children: [
                 // Lottie Animation as the background
 
-                Positioned.fill(
-                  child: SizedBox(
-                      height: 200, // Set the desired height
-                      width: 200, // Set the desired width
-                      child: rive.RiveAnimation.asset(
-                        "assets/animation/sky_rain.riv",
-                        fit: BoxFit.cover,
-                      )),
-                ),
+                // Positioned.fill(
+                //   child: SizedBox(
+                //       height: 200, // Set the desired height
+                //       width: 200, // Set the desired width
+                //       child: rive.RiveAnimation.asset(
+                //         "assets/animation/sky_rain.riv",
+                //         fit: BoxFit.cover,
+                //       )),
+                // ),
                 // Positioned.fill(
                 //   child: BackdropFilter(
                 //     filter: ImageFilter.blur(
@@ -167,6 +182,17 @@ class _HomeState extends State<Home> {
                 //     ),
                 //   ),
                 // ),
+
+                SizedBox.expand(
+                  child: FittedBox(
+                    fit: BoxFit.cover,
+                    child: SizedBox(
+                      width: _controller.value.size.width,
+                      height: _controller.value.size.height,
+                      child: VideoPlayer(_controller),
+                    ),
+                  ),
+                ),
                 Container(
                   // decoration: BoxDecoration(
                   //   borderRadius: BorderRadius.circular(10),
@@ -214,7 +240,7 @@ class _HomeState extends State<Home> {
                             Text(
                               weatherTemp,
                               style: TextStyle(
-                                  color: Colors.black,
+                                  color: Colors.white,
                                   fontSize: 49.sp,
                                   fontWeight: FontWeight.bold),
                             ),
@@ -276,7 +302,7 @@ class _HomeState extends State<Home> {
                                       ),
                                       Text(
                                         "${weatherModel.wind?.speed ?? 0.0} Km/h",
-                                        style: TextStyle(fontSize: 23.sp),
+                                        style: TextStyle(fontSize: 23.sp,color: Colors.white),
                                       )
                                     ],
                                   ),
@@ -297,7 +323,7 @@ class _HomeState extends State<Home> {
                                       ),
                                       Text(
                                         "${weatherModel.main?.humidity ?? 0}%",
-                                        style: TextStyle(fontSize: 23.sp),
+                                        style: TextStyle(fontSize: 23.sp,color: Colors.white),
                                       )
                                     ],
                                   ),
@@ -319,7 +345,7 @@ class _HomeState extends State<Home> {
                                       ),
                                       Text(
                                         "${weatherModel.main?.pressure ?? 0} hPa",
-                                        style: TextStyle(fontSize: 23.sp),
+                                        style: TextStyle(fontSize: 23.sp,color: Colors.white),
                                       )
                                     ],
                                   ),
@@ -340,7 +366,7 @@ class _HomeState extends State<Home> {
                                       ),
                                       Text(
                                         visibilityWeather,
-                                        style: TextStyle(fontSize: 23.sp),
+                                        style: TextStyle(fontSize: 23.sp,color: Colors.white),
                                       )
                                     ],
                                   ),
@@ -359,11 +385,11 @@ class _HomeState extends State<Home> {
                                 children: [
                                   Text(
                                     "Sunrise",
-                                    style: TextStyle(fontSize: 23.sp),
+                                    style: TextStyle(fontSize: 23.sp,color: Colors.white),
                                   ),
                                   Text(
                                     "${sunriseTime} AM",
-                                    style: TextStyle(fontSize: 23.sp),
+                                    style: TextStyle(fontSize: 23.sp,color: Colors.white),
                                   )
                                 ],
                               ),
@@ -373,11 +399,11 @@ class _HomeState extends State<Home> {
                                 children: [
                                   Text(
                                     "Sun-Set",
-                                    style: TextStyle(fontSize: 23.sp),
+                                    style: TextStyle(fontSize: 23.sp,color: Colors.white),
                                   ),
                                   Text(
                                     "${sunSetTime} PM",
-                                    style: TextStyle(fontSize: 23.sp),
+                                    style: TextStyle(fontSize: 23.sp,color: Colors.white),
                                   )
                                 ],
                               ),

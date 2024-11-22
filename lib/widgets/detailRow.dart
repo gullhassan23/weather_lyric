@@ -18,9 +18,10 @@ class Detailrow extends StatelessWidget {
       children: [
         Text(
           text,
-          style: TextStyle(fontSize: 23.sp),
+          style: TextStyle(fontSize: 23.sp, color: Colors.white),
         ),
-        Text(data, style: GoogleFonts.roboto(fontSize: 20.sp))
+        Text(data,
+            style: GoogleFonts.roboto(fontSize: 20.sp, color: Colors.white))
       ],
     );
   }
